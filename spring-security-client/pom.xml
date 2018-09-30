@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
+	
 	<groupId>com.techprimers.security</groupId>
 	<artifactId>spring-security-client</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -11,65 +11,86 @@
 	<name>spring-security-client</name>
 	<description>Demo project for Spring Boot</description>
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.6.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
-		<spring-cloud.version>Dalston.SR3</spring-cloud.version>
+		<version.java>1.8</version.java>
+		
+		<spring-cloud.version>Finchley.SR1</spring-cloud.version>
+
+		<version:org.springframework:spring>5.1.0.RELEASE</version:org.springframework:spring>
+		<version:org.springframework.boot:spring-boot>2.0.5.RELEASE</version:org.springframework.boot:spring-boot>
+		<version:org.springframework.security.oauth:spring-security-oauth2>2.3.3.RELEASE</version:org.springframework.security.oauth:spring-security-oauth2>
+		
+		<version:org.apache.maven.plugins:maven-compiler-plugin>3.8.0</version:org.apache.maven.plugins:maven-compiler-plugin>
+		<!-- spring-boot:run, spring-boot:start, spring-boot:stop, "clean package spring-boot:repackage" für executable jar -->
+		<version:org.springframework.boot:spring-boot-maven-plugin>${version:org.springframework.boot:spring-boot}</version:org.springframework.boot:spring-boot-maven-plugin>		
 	</properties>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${version:org.apache.maven.plugins:maven-compiler-plugin}</version>
+				<configuration>
+					<source>${version.java}</source>
+					<target>${version.java}</target>
+					<fork>true</fork>
+					<compilerVersion>${version.java}</compilerVersion>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<compilerArgs>
+					</compilerArgs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${version:org.springframework.boot:spring-boot-maven-plugin}</version>
+			</plugin>
+		</plugins>
+	</build>	
+
 
 	<dependencies>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>${version:org.springframework.boot:spring-boot}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<version>${version:org.springframework.boot:spring-boot}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${version:org.springframework:spring}</version>
+		</dependency>	
+		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-oauth2</artifactId>
+			<version>2.0.0.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<version>${version:org.springframework.boot:spring-boot}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
+			<version>3.0.2.RELEASE</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+			<version>${version:org.springframework.boot:spring-boot}</version>
 		</dependency>
 	</dependencies>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
-
 
 </project>

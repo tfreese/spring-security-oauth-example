@@ -1,7 +1,6 @@
 package com.techprimers.security.springsecurityauthserver.config;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -10,36 +9,61 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 
+/**
+ * @author Thomas Freese
+ */
 @Configuration
 @EnableAuthorizationServer
-public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter
+{
+    /**
+     *
+     */
+    @Resource
+    private AuthenticationManager authenticationManager = null;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-
-        security.tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()");
+    /**
+     * Erstellt ein neues {@link AuthorizationServerConfig} Object.
+     */
+    public AuthorizationServerConfig()
+    {
+        super();
     }
 
-
+    /**
+     * @see org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter#configure(org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer)
+     */
     @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+    public void configure(final AuthorizationServerEndpointsConfigurer endpoints) throws Exception
+    {
+        endpoints.authenticationManager(this.authenticationManager);
+    }
+
+    /**
+     * @see org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter#configure(org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer)
+     */
+    @Override
+    public void configure(final AuthorizationServerSecurityConfigurer security) throws Exception
+    {
+        security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
+    }
+
+    /**
+     * @see org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter#configure(org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer)
+     */
+    @Override
+    public void configure(final ClientDetailsServiceConfigurer clients) throws Exception
+    {
+        // @formatter:off
         clients
-                .inMemory()
+            .inMemory()
                 .withClient("ClientId")
-                .secret("secret")
-                .authorizedGrantTypes("authorization_code")
-                .scopes("user_info")
-                .autoApprove(true);
-    }
-
-
-    @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-
-        endpoints.authenticationManager(authenticationManager);
+                    .secret("secret")
+                    .authorizedGrantTypes("authorization_code")
+                    //.authorizedGrantTypes("authorization_code", "client_credentials", "password", "refresh_token", "implicit")
+                    .scopes("user_info")
+                    .autoApprove(true)
+        ;
+        // @formatter:on
     }
 }
